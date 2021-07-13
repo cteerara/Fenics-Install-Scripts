@@ -1,0 +1,7 @@
+#!/bin/bash
+source /home/ubuntwo/Desktop/FEniCS/install_env
+
+./configure --with-slepc4py=1 --prefix=${PREFIX} --with-clean
+make SLEPC_DIR=/home/ubuntwo/Desktop/FEniCS/src/slepc PETSC_DIR=/home/ubuntwo/Desktop/FEniCS/src/petsc PETSC_ARCH=arch-linux-c-opt
+make SLEPC_DIR=/home/ubuntwo/Desktop/FEniCS/src/slepc PETSC_DIR=/home/ubuntwo/Desktop/FEniCS/src/petsc install
+

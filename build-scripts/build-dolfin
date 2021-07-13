@@ -1,0 +1,116 @@
+#!/bin/bash
+source /home/ubuntwo/Desktop/FEniCS/install_env
+
+# !!! add this line to the top of /home/ubuntwo/Desktop/FEniCS/src/dolfin/cmake/modules/FindEigen3.cmake
+# set(EIGEN3_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/eigen3)
+
+
+# !!! add the following changes to dolfin code
+# ----------------------------------------------------------------------------------------------
+#    --- dolfin/io/HDF5Interface.cpp 
+#    +++ dolfin/io/HDF5Interface.cpp 
+#    @@ -281,8 +281,8 @@
+#         return false;
+#       }
+#
+#    -  H5O_info_t object_info;
+#    -  H5Oget_info_by_name(hdf5_file_handle, group_name.c_str(), &object_info,
+#    +  H5O_info1_t object_info;
+#    +  H5Oget_info_by_name1(hdf5_file_handle, group_name.c_str(), &object_info,
+#                           lapl_id);
+#
+#       // Close link access properties
+#
+# ----------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------
+# ---
+#  dolfin/geometry/IntersectionConstruction.cpp | 1 +
+#  dolfin/mesh/MeshFunction.h                   | 1 +
+#  2 files changed, 2 insertions(+)
+# 
+# diff --git a/dolfin/geometry/IntersectionConstruction.cpp b/dolfin/geometry/IntersectionConstruction.cpp
+# index 765dbb6..7ba99a8 100644
+# --- a/dolfin/geometry/IntersectionConstruction.cpp
+# +++ b/dolfin/geometry/IntersectionConstruction.cpp
+# @@ -18,6 +18,7 @@
+#  // First added:  2014-02-03
+#  // Last changed: 2017-12-12
+#  
+# +#include <algorithm>
+#  #include <iomanip>
+#  #include <dolfin/mesh/MeshEntity.h>
+#  #include "predicates.h"
+# ----------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------
+# --- a/dolfin/mesh/MeshFunction.h
+# +++ b/dolfin/mesh/MeshFunction.h
+# @@ -27,6 +27,7 @@
+#  #include <map>
+#  #include <vector>
+#  
+# +#include <algorithm>
+#  #include <memory>
+#  #include <unordered_set>
+#  #include <dolfin/common/Hierarchical.h>
+# -- 
+# 2.28.0
+# ----------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------
+# endian.hpp has been removed with Boost 1.73.
+# ---
+#  dolfin/io/VTKFile.cpp   | 5 ++---
+#  dolfin/io/VTKWriter.cpp | 1 -
+#  2 files changed, 2 insertions(+), 4 deletions(-)
+# 
+# diff --git a/dolfin/io/VTKFile.cpp b/dolfin/io/VTKFile.cpp
+# index 2fee53b..4dba84d 100644
+# --- a/dolfin/io/VTKFile.cpp
+# +++ b/dolfin/io/VTKFile.cpp
+# @@ -20,7 +20,6 @@
+#  #include <vector>
+#  #include <iomanip>
+#  #include <boost/cstdint.hpp>
+# -#include <boost/detail/endian.hpp>
+#  
+#  #include "pugixml.hpp"
+#  
+# @@ -614,9 +613,9 @@ void VTKFile::vtk_header_open(std::size_t num_vertices, std::size_t num_cells,
+#    std::string endianness = "";
+#    if (encode_string == "binary")
+#    {
+# -    #if defined BOOST_LITTLE_ENDIAN
+# +    #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#      endianness = "byte_order=\"LittleEndian\"";
+# -    #elif defined BOOST_BIG_ENDIAN
+# +    #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#      endianness = "byte_order=\"BigEndian\"";;
+#      #else
+#      dolfin_error("VTKFile.cpp",
+# diff --git a/dolfin/io/VTKWriter.cpp b/dolfin/io/VTKWriter.cpp
+# index eff6934..b57a665 100644
+# --- a/dolfin/io/VTKWriter.cpp
+# +++ b/dolfin/io/VTKWriter.cpp
+# @@ -24,7 +24,6 @@
+#  #include <sstream>
+#  #include <vector>
+#  #include <iomanip>
+# -#include <boost/detail/endian.hpp>
+#  
+#  #include <dolfin/fem/GenericDofMap.h>
+#  #include <dolfin/fem/FiniteElement.h>
+# -- 
+# 2.28.0
+
+
+# ----------------------------------------------------------------------------------------------
+
+
+cmake .. -DCMAKE_INSTALL_PREFIX=${PREFIX} -DDOLFIN_ENABLE_VTK=true -DDOLFIN_ENABLE_HDF5:BOOL=ON -DHDF5_C_COMPILER_EXECUTABLE:FILEPATH=${PREFIX}/bin/h5pcc 
+
+make install
+
+
+

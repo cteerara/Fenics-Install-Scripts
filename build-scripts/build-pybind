@@ -1,0 +1,4 @@
+#!/bin/bash
+source /home/ubuntwo/Desktop/FEniCS/install_env
+cmake -DPYBIND11_TEST=off -DCMAKE_INSTALL_PREFIX=${PREFIX} .. 
+make install

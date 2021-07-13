@@ -1,0 +1,16 @@
+#!/bin/bash
+PREFIX=/home/ubuntwo/Desktop/FEniCS/build
+export VALGRIND_DIR=${PREFIX}
+export MPI_DIR=/usr/local
+export PYTHONPATH="${PREFIX}/lib:${PREFIX}/lib/python3.8/site-packages/:${PYTHONPATH}"
+export PATHS="${PREFIX}:${PATHS}"
+export PATH="${PREFIX}:${PATH}"
+export PETSC_DIR=/home/ubuntwo/Desktop/FEniCS/src/petsc
+export PETSC_ARCH=arch-linux-c-opt
+export SLEPC_DIR=/home/ubuntwo/Desktop/FEniCS/src/slepc
+export EIGEN3_INCLUDE_DIR=${PREFIX}
+export EIGEN3_ROOT=${PREFIX}
+export EIGEN3_ROOT_DIR=${PREFIX}
+source /home/ubuntwo/Desktop/FEniCS/build/share/dolfin/dolfin.conf
+export BOOST_ROOT=${PREFIX}
+

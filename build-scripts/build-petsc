@@ -1,0 +1,28 @@
+#!/bin/bash
+source /home/ubuntwo/Desktop/FEniCS/install_env
+
+echo ${MPI_DIR}
+echo ${VALGRIND_DIR}
+
+python3 ./configure \
+		--with-mpi-dir=${MPI_DIR} \
+		--with-valgrind-dir=${VALGRIND_DIR} \
+    --with-petsc4py=1 \
+    --prefix=${PREFIX} \
+		COPTFLAGS="-O3 -march=native" \
+    CXXOPTFLAGS="-O3 -march=native" \
+    FOPTFLAGS="-O3 -march=native" \
+   --download-fblaslapack=1 \
+   --download-metis=1 \
+   --download-parmetis=1 \
+   --download-suitesparse=1 \
+   --download-scalapack=1 \
+   --download-scotch=1 \
+   --download-hypre=1 \
+   --download-mumps=1 \
+   --download-ml=1 \
+   --with-debugging=0 \
+   --with-shared-libraries 
+
+make
+make install
